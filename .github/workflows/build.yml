@@ -1,0 +1,35 @@
+iname: run
+
+on:
+  # Allows manual workflow run (must in default branch to work)
+  workflow_dispatch:
+
+jobs:
+  setup-distrobuilder:
+    runs-on: ubuntu-22.04
+    steps:
+
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup Distrobuilder
+      uses: SuperTemaki/setup-distrobuilder-test@main
+      with:
+        command: |
+          sudo distrobuilder \
+          build-lxd \
+          images/fedora.yml \
+          build-out \
+          --options=image.architecture=x86_64 \
+          --options=image.release=38 \
+          --options=image.variant=podman
+
+    - name: Run ls
+      run: |
+        ls -la
+        ls -la build-out
+        
+    - uses: actions/upload-artifact@v3
+      with:
+        name: my-artifact
+        path: build-out
