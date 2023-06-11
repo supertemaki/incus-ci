@@ -1,4 +1,4 @@
-iname: run
+name: build
 
 on:
   # Allows manual workflow run (must in default branch to work)
