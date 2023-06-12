@@ -13,7 +13,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Setup Distrobuilder
-      uses: SuperTemaki/setup-distrobuilder-test@main
+      uses: SuperTemaki/setup-distrobuilder@main
       with:
         command: |
           sudo distrobuilder \
