@@ -14,18 +14,9 @@ jobs:
 
     - name: Setup Distrobuilder
       uses: SuperTemaki/setup-distrobuilder@main
-      with:
-        command: |
-          sudo distrobuilder \
-          build-lxd \
-          images/fedora.yml \
-          build-out \
-          --options=image.architecture=x86_64 \
-          --options=image.release=38 \
-          --options=image.variant=podman
 
     - name: Run ls
-      run: |
+      run: |-
         ls -la
         ls -la build-out
         
