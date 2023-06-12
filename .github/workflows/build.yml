@@ -14,6 +14,8 @@ jobs:
 
     - name: Setup Distrobuilder
       uses: supertemaki/setup-distrobuilder@main
+      with:
+        channel: latest/stable
       
     - name: Build lxd image container
       uses: supertemaki/distrobuilder-build@main
