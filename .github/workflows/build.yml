@@ -1,3 +1,4 @@
+---
 name: build
 
 on:
@@ -21,11 +22,10 @@ jobs:
       uses: supertemaki/distrobuilder-build@main
 
     - name: Run ls
-      run: |-
-        ls -la
-        ls -la build-out
-        
+      run: |
+        tree
+
     - uses: actions/upload-artifact@v3
       with:
         name: my-artifact
-        path: build-out
+        path: distrobuilder.out
