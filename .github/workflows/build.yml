@@ -13,10 +13,10 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v3
 
-    - name: Setup Distrobuilder
-      uses: supertemaki/setup-distrobuilder@main
-      with:
-        channel: latest/stable
+#    - name: Setup Distrobuilder
+#      uses: supertemaki/setup-distrobuilder@main
+#      with:
+#        channel: latest/stable
       
     - name: Build lxd image container
       uses: supertemaki/distrobuilder-build@main
