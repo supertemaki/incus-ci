@@ -40,7 +40,7 @@ jobs:
           rsync \
           tar
 
-    - name: Prepare container for build
+    - name: Build lxd images
       run: |
         chmod +x entrypoint.sh
         ./entrypoint.sh
