@@ -20,7 +20,7 @@ jobs:
 #        - ${{ github.workspace }}:/data
       options: --privileged
   
-      - name: Checkout repo
+    - name: Checkout repo
       uses: actions/checkout@v3
 
 #    - name: Setup Distrobuilder
