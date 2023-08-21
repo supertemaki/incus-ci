@@ -39,6 +39,7 @@ jobs:
           git \
           rsync \
           tar
+        chmod +x entrypoint.sh
         ./entrypoint.sh
         
     - name: Run tree
