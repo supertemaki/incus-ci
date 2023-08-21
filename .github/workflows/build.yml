@@ -10,7 +10,17 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
 
-    - name: Checkout repo
+    container:
+      image: alpine:3.18
+#      env:
+#        NODE_ENV: development
+#      ports:
+#        - 80
+#      volumes:
+#        - ${{ github.workspace }}:/data
+      options: --privileged
+  
+      - name: Checkout repo
       uses: actions/checkout@v3
 
 #    - name: Setup Distrobuilder
@@ -18,14 +28,25 @@ jobs:
 #      with:
 #        channel: latest/stable
       
-    - name: Build lxd image container
-      uses: supertemaki/distrobuilder-build@main
+#    - name: Build lxd image container
+#      uses: supertemaki/distrobuilder-build@main
 
-    - name: Run ls
+    - name: Build lxd image container
+      run: |
+        apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
+          distrobuilder
+        apk add --no-cache \
+          bash \
+          git \
+          rsync \
+          tar
+        ./entrypoint.sh
+        
+    - name: Run tree
       run: |
         tree
 
     - uses: actions/upload-artifact@v3
       with:
-        name: my-artifact
+        name: lxd-image
         path: distrobuilder.output
