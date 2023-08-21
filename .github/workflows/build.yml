@@ -8,8 +8,6 @@ on:
 jobs:
   build-fedora-podman:
     runs-on: ubuntu-22.04
-    steps:
-
     container:
       image: alpine:3.18
 #      env:
@@ -19,7 +17,8 @@ jobs:
 #      volumes:
 #        - ${{ github.workspace }}:/data
       options: --privileged
-  
+      
+    steps:
     - name: Checkout repo
       uses: actions/checkout@v3
 
