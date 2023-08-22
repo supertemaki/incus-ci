@@ -1,13 +1,13 @@
 # Action to build lxd images
 ---
-name: build lxd image
+name: build lxd images
 
 on:
   # Allows manual workflow run (must in default branch to work)
   workflow_dispatch:
 
 jobs:
-  build-image:
+  build-lxd-images:
     runs-on: ubuntu-22.04
     container:
       image: alpine:3.18.3
@@ -41,17 +41,18 @@ jobs:
           rsync \
           tar
 
-    - name: Build lxd images
+    - name: build lxd images
       run: |
         chmod +x entrypoint.sh
         ./entrypoint.sh
 
-    - name: Run tree ans pwd
+    - name: Run pwd and tree
       run: |
         pwd
         tree
 
-    - uses: actions/upload-artifact@v3
+    - name: Upload image artifacts
+      uses: actions/upload-artifact@v3
       with:
         name: lxd-images
         path: distrobuilder.output
