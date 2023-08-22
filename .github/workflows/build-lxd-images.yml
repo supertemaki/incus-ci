@@ -31,20 +31,13 @@ jobs:
 #    - name: Build lxd image container
 #      uses: supertemaki/distrobuilder-build@main
 
-    - name: Prepare container for build
+    - name: Prepare for build
       run: |
-        apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
-          distrobuilder
-        apk add --no-cache \
-          bash \
-          git \
-          rsync \
-          tar
+        ./.github/workflows/scripts/prepare-for-build.sh
 
     - name: build lxd images
       run: |
-        chmod +x entrypoint.sh
-        ./entrypoint.sh
+        ./.github/workflows/scripts/build-lxd-images.sh
 
     - name: Run pwd and tree
       run: |
