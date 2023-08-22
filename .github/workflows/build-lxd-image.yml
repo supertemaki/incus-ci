@@ -1,3 +1,4 @@
+# Action to build lxd images
 ---
 name: build lxd image
 
