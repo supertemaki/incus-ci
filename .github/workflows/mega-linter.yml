@@ -14,6 +14,7 @@ on:
     branches:
       - main
       - master
+      - '!**patch'
 
 # Comment env block if you do not want to apply fixes
 env:
@@ -133,7 +134,8 @@ jobs:
           )
         with:
           token: ${{ steps.generate-token.outputs.token }}
-          committer: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          author: supertemaki[bot] <supertemaki[bot]@users.noreply.github.com>
+          committer: supertemaki[bot] <supertemaki[bot]@users.noreply.github.com>
           signoff: true
           commit-message: "[MegaLinter] Apply linters automatic fixes"
           title: "[MegaLinter] Apply linters automatic fixes"
