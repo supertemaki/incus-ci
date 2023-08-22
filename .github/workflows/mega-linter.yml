@@ -9,6 +9,8 @@ on:
   # Comment this line to trigger action only on pull-requests
   # (not recommended if you don't pay for GH Actions)
   push:
+    branches-ignore:
+      -'**patch'
 
   pull_request:
     branches:
@@ -134,8 +136,8 @@ jobs:
           )
         with:
           token: ${{ steps.generate-token.outputs.token }}
-          author: supertemaki[bot] <supertemaki[bot]@users.noreply.github.com>
-          committer: supertemaki[bot] <supertemaki[bot]@users.noreply.github.com>
+          author: supertemaki[bot] <${{ secrets.APP_ID }}+supertemaki[bot]@users.noreply.github.com>
+          committer: supertemaki[bot] <${{ secrets.APP_ID }}+supertemaki[bot]@users.noreply.github.com>
           signoff: true
           commit-message: "[MegaLinter] Apply linters automatic fixes"
           title: "[MegaLinter] Apply linters automatic fixes"
