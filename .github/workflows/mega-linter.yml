@@ -112,7 +112,7 @@ jobs:
       - uses: tibdex/github-app-token@v1
         id: generate-token
         with:
-          app_id: ${{ secrets.APP_ID }}
+          app_id: ${{ secrets.APP_ID }
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
 
       # Create pull request if applicable
@@ -133,6 +133,8 @@ jobs:
           )
         with:
           token: ${{ steps.generate-token.outputs.token }}
+          commiter: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: true
           commit-message: "[MegaLinter] Apply linters automatic fixes"
           title: "[MegaLinter] Apply linters automatic fixes"
           labels: bot
