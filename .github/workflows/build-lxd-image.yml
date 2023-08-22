@@ -1,5 +1,5 @@
 ---
-name: build
+name: build lxd image
 
 on:
   # Allows manual workflow run (must in default branch to work)
