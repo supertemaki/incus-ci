@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-images:
+  build-image:
     runs-on: ubuntu-22.04
     container:
       image: alpine:3.18.3
