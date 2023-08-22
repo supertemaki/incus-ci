@@ -10,13 +10,13 @@ on:
   # (not recommended if you don't pay for GH Actions)
   push:
     branches-ignore:
-      -'**patch'
+      - '**/patch'
 
   pull_request:
     branches:
       - main
       - master
-      - '!**patch'
+      - '!**/patch'
 
 # Comment env block if you do not want to apply fixes
 env:
