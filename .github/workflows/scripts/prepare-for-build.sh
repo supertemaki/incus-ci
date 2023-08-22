@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 set -eux
 
 apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
