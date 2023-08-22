@@ -133,7 +133,7 @@ jobs:
           )
         with:
           token: ${{ steps.generate-token.outputs.token }}
-          commiter: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          committer: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: true
           commit-message: "[MegaLinter] Apply linters automatic fixes"
           title: "[MegaLinter] Apply linters automatic fixes"
