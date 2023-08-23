@@ -11,7 +11,6 @@ RUN git clone https://github.com/lxc/distrobuilder.git; \
     make
 
 
-# dummy-line
 # final stage
 FROM debian:12.1-slim as final-stage
 
