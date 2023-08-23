@@ -31,13 +31,16 @@ jobs:
       #- name: Build lxd image container
       #  uses: supertemaki/distrobuilder-build@main
 
-      - name: Prepare for build
-        run: |
-          ./.github/workflows/scripts/prepare-for-build.sh
+      #- name: Prepare for build
+      #  run: |
+      #    ./.github/workflows/scripts/prepare-for-build.sh
 
-      - name: Build lxd images
-        run: |
-          ./.github/workflows/scripts/build-lxd-images.sh
+      #- name: Build lxd images
+      #  run: |
+      #    ./.github/workflows/scripts/build-lxd-images.sh
+
+      - name: build
+        uses: supertemaki/distrobuilder-build@main
 
       - name: Upload image artifacts
         uses: actions/upload-artifact@v3
