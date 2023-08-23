@@ -38,9 +38,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  if: "${{ github.ref != '**/main' }}"
   megalinter:
     #if: "${{ github.event.pull_request.head.ref != '**/main' }}"
-    if: "${{ github.ref != '**/main' }}"
     name: MegaLinter
     runs-on: ubuntu-22.04
 
