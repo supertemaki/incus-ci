@@ -11,38 +11,33 @@ jobs:
     runs-on: ubuntu-22.04
     container:
       image: alpine:3.18.3
-      #      env:
-      #        NODE_ENV: development
-      #      ports:
-      #        - 80
-      #      volumes:
-      #        - ${{ github.workspace }}:/data
+      #env:
+      #  NODE_ENV: development
+      #ports:
+      #  - 80
+      #volumes:
+      #  - ${{ github.workspace }}:/data
       options: --privileged
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      #    - name: Setup Distrobuilder
-      #      uses: supertemaki/setup-distrobuilder@main
-      #      with:
-      #        channel: latest/stable
+      #- name: Setup Distrobuilder
+      #  uses: supertemaki/setup-distrobuilder@main
+      #  with:
+      #    channel: latest/stable
 
-      #    - name: Build lxd image container
-      #      uses: supertemaki/distrobuilder-build@main
+      #- name: Build lxd image container
+      #  uses: supertemaki/distrobuilder-build@main
 
       - name: Prepare for build
         run: |
           ./.github/workflows/scripts/prepare-for-build.sh
 
-      - name: build lxd images
+      - name: Build lxd images
         run: |
           ./.github/workflows/scripts/build-lxd-images.sh
-
-      - name: Run pwd and tree
-        run: |
-          pwd
-          tree
 
       - name: Upload image artifacts
         uses: actions/upload-artifact@v3
