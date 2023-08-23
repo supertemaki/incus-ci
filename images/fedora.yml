@@ -6,395 +6,395 @@ source:
   url: https://kojipkgs.fedoraproject.org
 
 files:
-- path: /etc/default/grub
-  generator: dump
-  content: |-
-    # Set the recordfail timeout
-    GRUB_RECORDFAIL_TIMEOUT=0
+  - path: /etc/default/grub
+    generator: dump
+    content: |-
+      # Set the recordfail timeout
+      GRUB_RECORDFAIL_TIMEOUT=0
 
-    # Do not wait on grub prompt
-    GRUB_TIMEOUT=0
+      # Do not wait on grub prompt
+      GRUB_TIMEOUT=0
 
-    # Set the default commandline
-    GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} console=tty1 console=ttyS0"
+      # Set the default commandline
+      GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} console=tty1 console=ttyS0"
 
-    # Set the grub console type
-    GRUB_TERMINAL=console
+      # Set the grub console type
+      GRUB_TERMINAL=console
 
-    # Disable os-prober
-    GRUB_DISABLE_OS_PROBER=true
-  types:
-  - vm
+      # Disable os-prober
+      GRUB_DISABLE_OS_PROBER=true
+    types:
+      - vm
 
-- path: /etc/dracut.conf.d/lxd.conf
-  generator: dump
-  content: |-
-    add_drivers+=virtio_scsi
-  types:
-  - vm
+  - path: /etc/dracut.conf.d/lxd.conf
+    generator: dump
+    content: |-
+      add_drivers+=virtio_scsi
+    types:
+      - vm
 
-- generator: fstab
-  types:
-  - vm
+  - generator: fstab
+    types:
+      - vm
 
-- path: /etc/machine-id
-  generator: dump
+  - path: /etc/machine-id
+    generator: dump
 
-- path: /etc/fstab
-  generator: dump
-  types:
-  - container
+  - path: /etc/fstab
+    generator: dump
+    types:
+      - container
 
-- path: /var/lib/dbus/machine-id
-  generator: remove
+  - path: /var/lib/dbus/machine-id
+    generator: remove
 
-- path: /etc/hostname
-  generator: hostname
+  - path: /etc/hostname
+    generator: hostname
 
-- path: /etc/hosts
-  generator: hosts
+  - path: /etc/hosts
+    generator: hosts
 
-- name: eth0.network
-  path: /etc/systemd/network/eth0.network
-  generator: dump
-  content: |-
-    [Match]
-    Name=eth0
+  - name: eth0.network
+    path: /etc/systemd/network/eth0.network
+    generator: dump
+    content: |-
+      [Match]
+      Name=eth0
 
-    [Network]
-    DHCP=yes
-  variants:
-  - default
-  - podman
-  types:
-  - container
+      [Network]
+      DHCP=yes
+    variants:
+      - default
+      - podman
+    types:
+      - container
 
-- name: enp5s0.network
-  path: /etc/systemd/network/enp5s0.network
-  generator: dump
-  content: |-
-    [Match]
-    Name=enp5s0
+  - name: enp5s0.network
+    path: /etc/systemd/network/enp5s0.network
+    generator: dump
+    content: |-
+      [Match]
+      Name=enp5s0
 
-    [Network]
-    DHCP=yes
-  variants:
-  - default
-  - podman
-  types:
-  - vm
+      [Network]
+      DHCP=yes
+    variants:
+      - default
+      - podman
+    types:
+      - vm
 
-- name: delegate.conf
-  path: /etc/systemd/system/user@.service.d/delegate.conf
-  generator: dump
-  content: |-
-    [Service]
+  - name: delegate.conf
+    path: /etc/systemd/system/user@.service.d/delegate.conf
+    generator: dump
+    content: |-
+      [Service]
 
-    Delegate=yes
-  variants:
-  - podman
+      Delegate=yes
+    variants:
+      - podman
 
-- path: /var/lib/systemd/linger/rootless-container
-  generator: dump
-  variants:
-  - podman
+  - path: /var/lib/systemd/linger/rootless-container
+    generator: dump
+    variants:
+      - podman
 
-- name: meta-data
-  generator: cloud-init
-  variants:
-  - cloud
+  - name: meta-data
+    generator: cloud-init
+    variants:
+      - cloud
 
-- name: network-config
-  generator: cloud-init
-  content: |-
-    {% if config_get("user.network-config", "") == "" %}version: 1
-    config:
-      - type: physical
-        name: {% if instance.type == "virtual-machine" %}enp5s0{% else %}eth0{% endif %}
-        subnets:
-          - type: {% if config_get("user.network_mode", "") == "link-local" %}manual{% else %}dhcp{% endif %}
-            control: auto
-          - type: dhcp6
-            control: auto{% else %}{{ config_get("user.network-config", "") }}{% endif %}
-  variants:
-  - cloud
+  - name: network-config
+    generator: cloud-init
+    content: |-
+      {% if config_get("user.network-config", "") == "" %}version: 1
+      config:
+        - type: physical
+          name: {% if instance.type == "virtual-machine" %}enp5s0{% else %}eth0{% endif %}
+          subnets:
+            - type: {% if config_get("user.network_mode", "") == "link-local" %}manual{% else %}dhcp{% endif %}
+              control: auto
+            - type: dhcp6
+              control: auto{% else %}{{ config_get("user.network-config", "") }}{% endif %}
+    variants:
+      - cloud
 
-- name: user-data
-  generator: cloud-init
-  variants:
-  - cloud
+  - name: user-data
+    generator: cloud-init
+    variants:
+      - cloud
 
-- name: vendor-data
-  generator: cloud-init
-  variants:
-  - cloud
+  - name: vendor-data
+    generator: cloud-init
+    variants:
+      - cloud
 
-- generator: lxd-agent
-  types:
-  - vm
+  - generator: lxd-agent
+    types:
+      - vm
 
 packages:
   manager: dnf
   update: true
   cleanup: true
   sets:
-  - packages:
-    - cpio
-    - file
-    - findutils
-    - fipscheck
-    - gettext
-    - glibc-all-langpacks
-    - hardlink
-    - hostname
-    - ipcalc
-    - iproute
-    - iproute-tc
-    - iputils
-    - kbd
-    - kmod
-    - openssh-clients
-    - passwd
-    - pigz
-    - policycoreutils
-    - procps-ng
-    - sudo
-    - systemd-udev
-    - which
-    - xz
-    action: install
+    - packages:
+        - cpio
+        - file
+        - findutils
+        - fipscheck
+        - gettext
+        - glibc-all-langpacks
+        - hardlink
+        - hostname
+        - ipcalc
+        - iproute
+        - iproute-tc
+        - iputils
+        - kbd
+        - kmod
+        - openssh-clients
+        - passwd
+        - pigz
+        - policycoreutils
+        - procps-ng
+        - sudo
+        - systemd-udev
+        - which
+        - xz
+      action: install
 
-  - packages:
-    - cloud-init
-    - openssh-server
-    action: install
-    variants:
-    - cloud
+    - packages:
+        - cloud-init
+        - openssh-server
+      action: install
+      variants:
+        - cloud
 
-  - packages:
-    - bash-completion
-    - dnf-automatic
-    - podman
-    - systemd-container
-    - vim
-    action: install
-    variants:
-    - podman
+    - packages:
+        - bash-completion
+        - dnf-automatic
+        - podman
+        - systemd-container
+        - vim
+      action: install
+      variants:
+        - podman
 
-  - packages:
-    - cloud-utils-growpart
-    action: install
-    types:
-    - vm
-    variants:
-    - cloud
+    - packages:
+        - cloud-utils-growpart
+      action: install
+      types:
+        - vm
+      variants:
+        - cloud
 
-  - packages:
-    - libsss_idmap
-    - libsss_nss_idmap
-    - sssd-client
-    action: remove
-  
-  - packages:
-    - qemu-user-static
-    action: remove
-    types:
-    - container
-    variants:
-    - podman
+    - packages:
+        - libsss_idmap
+        - libsss_nss_idmap
+        - sssd-client
+      action: remove
 
-  - packages:
-    - grub2-efi-x64
-    action: install
-    architectures:
-    - x86_64
-    types:
-    - vm
+    - packages:
+        - qemu-user-static
+      action: remove
+      types:
+        - container
+      variants:
+        - podman
 
-  - packages:
-    - grub2-efi-aa64
-    action: install
-    architectures:
-    - aarch64
-    types:
-    - vm
+    - packages:
+        - grub2-efi-x64
+      action: install
+      architectures:
+        - x86_64
+      types:
+        - vm
 
-  - packages:
-    - kernel
-    - shim
-    - dracut
-    action: install
-    types:
-    - vm
+    - packages:
+        - grub2-efi-aa64
+      action: install
+      architectures:
+        - aarch64
+      types:
+        - vm
+
+    - packages:
+        - kernel
+        - shim
+        - dracut
+      action: install
+      types:
+        - vm
 
 actions:
-- trigger: post-unpack
-  action: |-
-    #!/bin/sh
+  - trigger: post-unpack
+    action: |-
+      #!/bin/sh
 
-    set -eux
+      set -eux
 
-    # Increase connection timeout
-    echo timeout=60 >> /etc/dnf/dnf.conf
+      # Increase connection timeout
+      echo timeout=60 >> /etc/dnf/dnf.conf
 
-    # Let dnf find the fastest mirror
-    echo fastestmirror=True >> /etc/dnf/dnf.conf
+      # Let dnf find the fastest mirror
+      echo fastestmirror=True >> /etc/dnf/dnf.conf
 
-    # Backup all repo files
-    for repo in $(ls /etc/yum.repos.d/*.repo); do
-      cp "${repo}" "${repo}.bak"
-    done
+      # Backup all repo files
+      for repo in $(ls /etc/yum.repos.d/*.repo); do
+        cp "${repo}" "${repo}.bak"
+      done
 
-- trigger: post-unpack
-  action: |-
-    #!/bin/sh
+  - trigger: post-unpack
+    action: |-
+      #!/bin/sh
 
-    set -eux
+      set -eux
 
-    # Use baseurl instead of metalink to avoid networking issues
-    for repo in $(ls /etc/yum.repos.d/*.repo); do
-      grep -q '^#baseurl' "${repo}" || continue
+      # Use baseurl instead of metalink to avoid networking issues
+      for repo in $(ls /etc/yum.repos.d/*.repo); do
+        grep -q '^#baseurl' "${repo}" || continue
 
-      sed -ri 's/^metalink=.*/#\0/g;s@^#(baseurl=)http://download.example/pub(.*)@\1https://mirror.csclub.uwaterloo.ca/\2@g' "${repo}"
-    done
-  architectures:
-  - aarch64
-  - armhfp
-  - x86_64
+        sed -ri 's/^metalink=.*/#\0/g;s@^#(baseurl=)http://download.example/pub(.*)@\1https://mirror.csclub.uwaterloo.ca/\2@g' "${repo}"
+      done
+    architectures:
+      - aarch64
+      - armhfp
+      - x86_64
 
-- trigger: post-unpack
-  action: |-
-    #!/bin/sh
+  - trigger: post-unpack
+    action: |-
+      #!/bin/sh
 
-    set -eux
+      set -eux
 
-    # Use Fedora 38 GPG key to avoid package installation errors
-    for repo in $(ls /etc/yum.repos.d/*.repo); do
-      grep -q 'RPM-GPG-KEY-fedora-38' "${repo}" && continue
+      # Use Fedora 38 GPG key to avoid package installation errors
+      for repo in $(ls /etc/yum.repos.d/*.repo); do
+        grep -q 'RPM-GPG-KEY-fedora-38' "${repo}" && continue
 
-      sed -ri 's#^gpgkey=.*#\0 file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-38-$basearch#g' "${repo}"
-    done
-  architectures:
-  - aarch64
-  - x86_64
-  releases:
-  - Rawhide
+        sed -ri 's#^gpgkey=.*#\0 file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-38-$basearch#g' "${repo}"
+      done
+    architectures:
+      - aarch64
+      - x86_64
+    releases:
+      - Rawhide
 
-- trigger: post-unpack
-  action: |-
-    #!/bin/sh
+  - trigger: post-unpack
+    action: |-
+      #!/bin/sh
 
-    set -eux
+      set -eux
 
-    # Use baseurl instead of metalink to avoid networking issues
-    for repo in $(ls /etc/yum.repos.d/*.repo); do
-      grep -q '^#baseurl' "${repo}" || continue
+      # Use baseurl instead of metalink to avoid networking issues
+      for repo in $(ls /etc/yum.repos.d/*.repo); do
+        grep -q '^#baseurl' "${repo}" || continue
 
-      sed -ri 's/^metalink=.*/#\0/g;s@^#(baseurl=)http://download.example/pub/fedora/linux(.*)@\1https://muug.ca/mirror/fedora-secondary\2@g' "${repo}"
-    done
-  architectures:
-  - ppc64le
-  - s390x
+        sed -ri 's/^metalink=.*/#\0/g;s@^#(baseurl=)http://download.example/pub/fedora/linux(.*)@\1https://muug.ca/mirror/fedora-secondary\2@g' "${repo}"
+      done
+    architectures:
+      - ppc64le
+      - s390x
 
-- trigger: post-packages
-  action: |-
-    #!/bin/sh
-    umount -l /etc/resolv.conf || true
-    rm /etc/resolv.conf
-    ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
-    systemctl enable systemd-resolved
-    cp -R /etc/skel/.bash* /root/
+  - trigger: post-packages
+    action: |-
+      #!/bin/sh
+      umount -l /etc/resolv.conf || true
+      rm /etc/resolv.conf
+      ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+      systemctl enable systemd-resolved
+      cp -R /etc/skel/.bash* /root/
 
-- trigger: post-packages
-  action: |-
-    #!/bin/sh
-    systemctl enable systemd-networkd
-  variants:
-  - default
-  - podman
+  - trigger: post-packages
+    action: |-
+      #!/bin/sh
+      systemctl enable systemd-networkd
+    variants:
+      - default
+      - podman
 
-- trigger: post-packages
-  action: |-
-    #!/bin/sh
-    systemctl enable systemd-networkd
-  variants:
-  - cloud
+  - trigger: post-packages
+    action: |-
+      #!/bin/sh
+      systemctl enable systemd-networkd
+    variants:
+      - cloud
 
-- trigger: post-packages
-  action: |-
-    #!/bin/sh
-    systemctl enable cloud-init
-    systemctl enable cloud-config
-    systemctl enable cloud-final
-  variants:
-  - cloud
+  - trigger: post-packages
+    action: |-
+      #!/bin/sh
+      systemctl enable cloud-init
+      systemctl enable cloud-config
+      systemctl enable cloud-final
+    variants:
+      - cloud
 
-- trigger: post-packages
-  action: |-
-    #!/bin/sh
-    set -eux
+  - trigger: post-packages
+    action: |-
+      #!/bin/sh
+      set -eux
 
-    # Enable dnf auto-update
-    systemctl enable dnf-automatic-install.timer
+      # Enable dnf auto-update
+      systemctl enable dnf-automatic-install.timer
 
-    # Create the rootless-container user account
-    #getent group sudo >/dev/null 2>&1 || groupadd --system sudo
-    useradd --create-home --shell /bin/bash --uid 1000 --user-group rootless-container
-    
-    # ???
-    #machinectl shell rootless@ /usr/bin/systemctl --user enable podman-auto-update.timer dbus.service
-    
-    # Fix permissions of newuidmap and newgidmap files
-    # see https://github.com/containers/buildah/issues/3834
-    rpm --restore shadow-utils 2>/dev/null
-  variants:
-  - podman
+      # Create the rootless-container user account
+      #getent group sudo >/dev/null 2>&1 || groupadd --system sudo
+      useradd --create-home --shell /bin/bash --uid 1000 --user-group rootless-container
 
-- trigger: post-unpack
-  action: |-
-    #!/bin/sh
-    # Generate machine-id in order for the kernel stuff to be configured properly
-    systemd-machine-id-setup
-  types:
-  - vm
+      # ???
+      #machinectl shell rootless@ /usr/bin/systemctl --user enable podman-auto-update.timer dbus.service
 
-- trigger: post-files
-  action: |-
-    #!/bin/sh
-    set -eux
+      # Fix permissions of newuidmap and newgidmap files
+      # see https://github.com/containers/buildah/issues/3834
+      rpm --restore shadow-utils 2>/dev/null
+    variants:
+      - podman
 
-    # Remove the "Container Image" string as this is going to be am VM
-    sed -i 's/[ ]*(Container Image)//;/^VARIANT/d' /etc/os-release
+  - trigger: post-unpack
+    action: |-
+      #!/bin/sh
+      # Generate machine-id in order for the kernel stuff to be configured properly
+      systemd-machine-id-setup
+    types:
+      - vm
 
-    target=/boot/efi/EFI/fedora/grub.cfg
-    grub2-mkconfig -o "${target}"
-    sed -i "s#root=[^ ]*#root=/dev/sda2#g" "${target}"
+  - trigger: post-files
+    action: |-
+      #!/bin/sh
+      set -eux
 
-    sed -Eri "s#^(linux|initrd) .+/overlay/#\1 /#g" /boot/loader/entries/*
-    sed -ri 's#^options .+#options $kernelopts#g' /boot/loader/entries/*
+      # Remove the "Container Image" string as this is going to be am VM
+      sed -i 's/[ ]*(Container Image)//;/^VARIANT/d' /etc/os-release
 
-    # Regenerate initramfs
-    kver=$(ls /boot/initramfs-*.img | sed -r 's#.*initramfs-(.+)\.img#\1#')
-    dracut --kver "${kver}" -f
+      target=/boot/efi/EFI/fedora/grub.cfg
+      grub2-mkconfig -o "${target}"
+      sed -i "s#root=[^ ]*#root=/dev/sda2#g" "${target}"
 
-    # Unmask all masked unit files
-    for f in $(find /etc/systemd/system -type l); do
-      [ "$(readlink ${f})" = "/dev/null" ] && rm "${f}"
-    done
+      sed -Eri "s#^(linux|initrd) .+/overlay/#\1 /#g" /boot/loader/entries/*
+      sed -ri 's#^options .+#options $kernelopts#g' /boot/loader/entries/*
 
-    # Wipe grub environment
-    rm -f /boot/efi/EFI/fedora/grubenv
+      # Regenerate initramfs
+      kver=$(ls /boot/initramfs-*.img | sed -r 's#.*initramfs-(.+)\.img#\1#')
+      dracut --kver "${kver}" -f
 
-    exit 0
-  types:
-  - vm
+      # Unmask all masked unit files
+      for f in $(find /etc/systemd/system -type l); do
+        [ "$(readlink ${f})" = "/dev/null" ] && rm "${f}"
+      done
 
-- trigger: post-files
-  action: |-
-    #!/bin/sh
-    set -eux
+      # Wipe grub environment
+      rm -f /boot/efi/EFI/fedora/grubenv
 
-    # Restore repos
-    for repo in $(ls /etc/yum.repos.d/*.bak); do
-      mv "${repo}" ${repo%.*}
-    done
+      exit 0
+    types:
+      - vm
+
+  - trigger: post-files
+    action: |-
+      #!/bin/sh
+      set -eux
+
+      # Restore repos
+      for repo in $(ls /etc/yum.repos.d/*.bak); do
+        mv "${repo}" ${repo%.*}
+      done

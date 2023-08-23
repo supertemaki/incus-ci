@@ -10,7 +10,7 @@ on:
   # (not recommended if you don't pay for GH Actions)
   push:
     branches-ignore:
-      - '**/patch'
+      - "**/patch"
 
   pull_request:
     branches:
@@ -53,7 +53,6 @@ jobs:
       pull-requests: write
 
     steps:
-
       # Git Checkout
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -76,7 +75,6 @@ jobs:
         # All available variables are described in documentation
         # https://megalinter.io/configuration/
         env:
-        
           # Validates all source when push on main, else just the git diff with
           # main. Override with true if you always want to lint all sources
           #

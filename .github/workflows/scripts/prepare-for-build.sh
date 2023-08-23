@@ -2,10 +2,10 @@
 set -eux
 
 apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
-  distrobuilder
+	distrobuilder
 
 apk add --no-cache \
-  bash \
-  git \
-  rsync \
-  tar
+	bash \
+	git \
+	rsync \
+	tar
