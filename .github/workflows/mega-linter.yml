@@ -39,7 +39,8 @@ concurrency:
 
 jobs:
   megalinter:
-    if: "${{ github.event.pull_request.head.ref != '**/main' }}"
+    #if: "${{ github.event.pull_request.head.ref != '**/main' }}"
+    if: ${{ github.ref != '**/main' }}
     name: MegaLinter
     runs-on: ubuntu-22.04
 
