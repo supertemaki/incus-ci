@@ -231,7 +231,6 @@ actions:
   - trigger: post-unpack
     action: |-
       #!/bin/sh
-
       set -eux
 
       # Increase connection timeout
@@ -248,7 +247,6 @@ actions:
   - trigger: post-unpack
     action: |-
       #!/bin/sh
-
       set -eux
 
       # Use baseurl instead of metalink to avoid networking issues
@@ -265,7 +263,6 @@ actions:
   - trigger: post-unpack
     action: |-
       #!/bin/sh
-
       set -eux
 
       # Use Fedora 38 GPG key to avoid package installation errors
@@ -283,7 +280,6 @@ actions:
   - trigger: post-unpack
     action: |-
       #!/bin/sh
-
       set -eux
 
       # Use baseurl instead of metalink to avoid networking issues
@@ -299,30 +295,21 @@ actions:
   - trigger: post-packages
     action: |-
       #!/bin/sh
+      set -eux
+      
       umount -l /etc/resolv.conf || true
       rm /etc/resolv.conf
       ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
       systemctl enable systemd-resolved
       cp -R /etc/skel/.bash* /root/
 
-  - trigger: post-packages
-    action: |-
-      #!/bin/sh
       systemctl enable systemd-networkd
-    variants:
-      - default
-      - podman
 
   - trigger: post-packages
     action: |-
       #!/bin/sh
-      systemctl enable systemd-networkd
-    variants:
-      - cloud
+      set -eux
 
-  - trigger: post-packages
-    action: |-
-      #!/bin/sh
       systemctl enable cloud-init
       systemctl enable cloud-config
       systemctl enable cloud-final
@@ -353,6 +340,8 @@ actions:
   - trigger: post-unpack
     action: |-
       #!/bin/sh
+      set -eux
+
       # Generate machine-id in order for the kernel stuff to be configured properly
       systemd-machine-id-setup
     types:
