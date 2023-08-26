@@ -5,16 +5,16 @@ FROM golang:1.21.0-bookworm as build-stage
 #    cd distrobuilder; \
 #    make
 
-RUN git clone https://github.com/lxc/distrobuilder.git; \
-    cd distrobuilder; \
-    git ckeckout f77300b; \
+RUN git clone https://github.com/lxc/distrobuilder.git && \
+    cd distrobuilder && \
+    git ckeckout f77300b && \
     make
 
 
 # final stage
 FROM debian:12.1-slim as final-stage
 
-RUN DEBIAN_FRONTEND=noninteractive apt update -qq; \
+RUN DEBIAN_FRONTEND=noninteractive apt update -qq && \
     apt install -y \
     rsync \
     xz-utils
