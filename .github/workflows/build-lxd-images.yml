@@ -10,14 +10,14 @@ jobs:
   build-lxd-images:
     runs-on: ubuntu-22.04
     #container:
-      #image: alpine:3.18.3
-      #env:
-      #  NODE_ENV: development
-      #ports:
-      #  - 80
-      #volumes:
-      #  - ${{ github.workspace }}:/data
-      #options: --privileged
+    #image: alpine:3.18.3
+    #env:
+    #  NODE_ENV: development
+    #ports:
+    #  - 80
+    #volumes:
+    #  - ${{ github.workspace }}:/data
+    #options: --privileged
 
     steps:
       - name: Checkout repo
