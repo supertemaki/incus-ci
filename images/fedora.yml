@@ -328,12 +328,18 @@ actions:
       #getent group sudo >/dev/null 2>&1 || groupadd --system sudo
       useradd --create-home --shell /bin/bash --uid 1000 --user-group rootless-container
 
+      # Create and prepare folder for quadlet
+      mkdir --parents /etc/containers/systemd/users/1000
+      chown 1000:1000 /etc/containers/systemd/users/1000
+      chmod 700 /etc/containers/systemd/users/1000
+
       # ???
       #machinectl shell rootless@ /usr/bin/systemctl --user enable podman-auto-update.timer dbus.service
 
       # Fix permissions of newuidmap and newgidmap files
       # see https://github.com/containers/buildah/issues/3834
       rpm --restore shadow-utils 2>/dev/null
+
     variants:
       - podman
 
