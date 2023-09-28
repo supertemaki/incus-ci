@@ -105,7 +105,7 @@ files:
 
       [Service]
       Type=oneshot
-      ExecStart=inotifywait.sh
+      ExecStart=inotifywait.bash
 
       [Install]
       WantedBy=default.target
