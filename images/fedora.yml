@@ -1,3 +1,5 @@
+---
+
 image:
   distribution: fedora
 
@@ -94,6 +96,53 @@ files:
     variants:
       - podman
 
+  - name: inotifywait.service
+    path: /etc/systemd/user/inotifywait.service
+    generator: dump
+    content: |-
+      [Unit]
+      Description=Executes script when a file has changed.
+      # systemctl enable --global inotifywait.service
+
+      [Service]
+      Type=oneshot
+      ExecStart=inotifywait.sh
+
+      [Install]
+      WantedBy=default.target
+    variants:
+      - podman
+
+  - name: inotifywait.bash
+    path: /usr/local/bin/inotifywait.bash
+    generator: dump
+    content: |-
+      #!/usr/bin/env bash
+
+      set -eux
+
+      helper() {
+        ls /etc/containers/systemd/users/$UID | \
+        grep ".kube$\|.container$" | \
+        cut --delimiter="." --fields=1 | \
+        sed "s/$/.service/g"
+      }
+
+      inotifywait --monitor \
+        --include ".container$|.env$|.kube$|.yml$" \
+        --timefmt "%Y-%m-%dT%T%z" \
+        --format "%T %w %e %f" \
+        --event modify \
+        /etc/containers/systemd/users/$UID |
+      while read -r file_modified; do
+        echo "$file_modified"
+        systemctl --user daemon-reload
+        systemctl --user restart $(helper)
+      done
+    mode: 0755
+    variants:
+      - podman
+
   - path: /var/lib/systemd/linger/rootless-container
     generator: dump
     variants:
@@ -173,7 +222,12 @@ packages:
 
     - packages:
         - bash-completion
+        # Prevent error, but for some reason is not need
+        # unix @->/run/systemd/private: read: connection reset by peer: unknown.
+        # See https://rootlesscontaine.rs/getting-started/common/login
+        #- dbus-daemon
         - dnf-automatic
+        - inotify-tools
         - podman
         - systemd-container
         - vim
@@ -339,7 +393,6 @@ actions:
       # Fix permissions of newuidmap and newgidmap files
       # see https://github.com/containers/buildah/issues/3834
       rpm --restore shadow-utils 2>/dev/null
-
     variants:
       - podman
 
@@ -393,3 +446,10 @@ actions:
       for repo in $(ls /etc/yum.repos.d/*.bak); do
         mv "${repo}" ${repo%.*}
       done
+
+  - trigger: post-files
+    action: |-
+      #!/usr/bin/env bash
+      set -eux
+
+      systemctl enable --global inotifywait.service
