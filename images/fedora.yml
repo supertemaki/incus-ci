@@ -105,7 +105,7 @@ files:
 
       [Service]
       Type=oneshot
-      ExecStart=inotifywait.bash
+      ExecStart=inotifywait.sh
 
       [Install]
       WantedBy=default.target
@@ -113,7 +113,7 @@ files:
       - podman
 
   - name: inotifywait.bash
-    path: /usr/local/bin/inotifywait.bash
+    path: /usr/local/bin/inotifywait.sh
     generator: dump
     content: |-
       #!/usr/bin/env bash
