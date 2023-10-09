@@ -387,7 +387,7 @@ actions:
       chmod 700 /etc/containers/systemd/users/1000
 
       # ???
-      #machinectl shell rootless@ /usr/bin/systemctl --user enable podman-auto-update.timer dbus.service
+      #machinectl shell rootless-container@ /usr/bin/systemctl --user enable podman-auto-update.timer dbus.service
 
       # Fix permissions of newuidmap and newgidmap files
       # see https://github.com/containers/buildah/issues/3834
