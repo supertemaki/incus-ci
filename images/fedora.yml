@@ -371,23 +371,38 @@ actions:
 
   - trigger: post-packages
     action: |-
-      #!/bin/sh
+      #!/bin/env bash
       set -eux
+
+      # Variables
+      USERNAME="container-rootless"
+      USER_UID="${USER_UID:=1000}"
+      USER_GID="${USER_UID}"
 
       # Enable dnf auto-update
       systemctl enable dnf-automatic-install.timer
 
-      # Create the rootless-container user account
+      # Create the rootless user account
       #getent group sudo >/dev/null 2>&1 || groupadd --system sudo
-      useradd --create-home --shell /bin/bash --uid 1000 --user-group rootless-container
+      useradd \
+          --user-group \
+          --create-home \
+          --shell /bin/bash \
+          --comment "rootless user for container creation"
+          --uid "${USER_UID}" \
+          --gid "${USER_GID}" \
+          "${USERNAME}"
 
-      # Create and prepare folder for quadlet
-      mkdir --parents /etc/containers/systemd/users/1000
-      chown 1000:1000 /etc/containers/systemd/users/1000
-      chmod 700 /etc/containers/systemd/users/1000
+      # Create and prepare directory for quadlet
+      install \
+          --directory \
+          --mode=0700 \
+          --owner="${USER_UID}" \
+          --group="${USER_GID}" \
+          /etc/containers/systemd/users/"${USER_UID}"
 
       # ???
-      #machinectl shell rootless-container@ /usr/bin/systemctl --user enable podman-auto-update.timer dbus.service
+      #machinectl shell container-rootless@ /usr/bin/systemctl --user enable podman-auto-update.timer dbus.service
 
       # Fix permissions of newuidmap and newgidmap files
       # see https://github.com/containers/buildah/issues/3834
