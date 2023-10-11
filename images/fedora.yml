@@ -376,7 +376,7 @@ actions:
 
       # Variables
       USERNAME="container-rootless"
-      USER_UID="${USER_UID:=1000}"
+      USER_UID="${USER_UID:-1000}"
       USER_GID="${USER_UID}"
 
       # Enable dnf auto-update
