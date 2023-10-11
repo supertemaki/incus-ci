@@ -388,7 +388,7 @@ actions:
           --user-group \
           --create-home \
           --shell /bin/bash \
-          --comment "rootless user for container creation"
+          --comment "rootless user for container creation" \
           --uid "${USER_UID}" \
           --gid "${USER_GID}" \
           "${USERNAME}"
