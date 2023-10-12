@@ -101,14 +101,16 @@ files:
     content: |-
       [Unit]
       Description=Executes script when a file has changed.
+
       # systemctl enable --global inotifywait.service
+      ConditionUser=!root
 
       [Service]
       Type=oneshot
       ExecStart=inotifywait.sh
 
       [Install]
-      WantedBy=default.target
+      WantedBy=multi-user.target
     variants:
       - podman
 
