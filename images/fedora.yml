@@ -110,7 +110,7 @@ files:
       ExecStart=inotifywait.sh
 
       [Install]
-      WantedBy=multi-user.target
+      WantedBy=default.target
     variants:
       - podman
 
