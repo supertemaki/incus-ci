@@ -101,12 +101,17 @@ files:
     content: |-
       [Unit]
       Description=Executes script when a file has changed.
-
       # systemctl enable --global inotifywait.service
+
       ConditionUser=!root
+
+      StartLimitIntervalSec=120
+      StartLimitBurst=10
 
       [Service]
       Type=oneshot
+      Restart=on-failure
+      RestartSec=5s
       ExecStart=inotifywait.sh
 
       [Install]
