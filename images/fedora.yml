@@ -256,6 +256,7 @@ packages:
       action: remove
 
     - packages:
+        - fuse-overlayfs
         - qemu-user-static
       action: remove
       types:
