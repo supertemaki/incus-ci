@@ -1,5 +1,5 @@
 # build stage
-FROM golang:1.21.0-bookworm as build-stage
+FROM golang:1.22.1-bookworm as build-stage
 
 #RUN git clone --depth 1 https://github.com/lxc/distrobuilder.git --branch distrobuilder-2.1; \
 #    cd distrobuilder; \
