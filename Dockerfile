@@ -12,7 +12,7 @@ RUN git clone https://github.com/lxc/distrobuilder.git && \
 
 
 # final stage
-FROM debian:12.5-slim as final-stage
+FROM debian:12.7-slim as final-stage
 
 RUN DEBIAN_FRONTEND=noninteractive apt update -qq && \
     apt install -y \
