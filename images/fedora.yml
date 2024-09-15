@@ -52,60 +52,60 @@ files:
     variants:
       - podman
 
-  - name: inotifywait.service
-    path: /etc/systemd/user/inotifywait.service
-    generator: dump
-    content: |-
-      [Unit]
-      Description=Executes script when a file has changed.
-      # systemctl enable --global inotifywait.service
-
-      ConditionUser=!root
-
-      StartLimitIntervalSec=120
-      StartLimitBurst=10
-
-      [Service]
-      Type=oneshot
-      Restart=on-failure
-      RestartSec=5s
-      ExecStart=inotifywait.sh
-
-      [Install]
-      # Start by default on boot
-      WantedBy=multi-user.target default.target
-    variants:
-      - podman
-
-  - name: inotifywait.bash
-    path: /usr/local/bin/inotifywait.sh
-    generator: dump
-    content: |-
-      #!/usr/bin/env bash
-
-      set -eux
-
-      helper() {
-        ls /etc/containers/systemd/users/$UID | \
-        grep ".kube$\|.container$" | \
-        cut --delimiter="." --fields=1 | \
-        sed "s/$/.service/g"
-      }
-
-      inotifywait --monitor \
-        --include ".container$|.env$|.kube$|.yml$" \
-        --timefmt "%Y-%m-%dT%T%z" \
-        --format "%T %w %e %f" \
-        --event modify \
-        /etc/containers/systemd/users/$UID |
-      while read -r file_modified; do
-        echo "$file_modified"
-        systemctl --user daemon-reload
-        systemctl --user restart $(helper)
-      done
-    mode: 0755
-    variants:
-      - podman
+#  - name: inotifywait.service
+#    path: /etc/systemd/user/inotifywait.service
+#    generator: dump
+#    content: |-
+#      [Unit]
+#      Description=Executes script when a file has changed.
+#      # systemctl enable --global inotifywait.service
+#
+#      ConditionUser=!root
+#
+#      StartLimitIntervalSec=120
+#      StartLimitBurst=10
+#
+#      [Service]
+#      Type=oneshot
+#      Restart=on-failure
+#      RestartSec=5s
+#      ExecStart=inotifywait.sh
+#
+#      [Install]
+#      # Start by default on boot
+#      WantedBy=multi-user.target default.target
+#    variants:
+#      - podman
+#
+#  - name: inotifywait.bash
+#    path: /usr/local/bin/inotifywait.sh
+#    generator: dump
+#    content: |-
+#      #!/usr/bin/env bash
+#
+#      set -eux
+#
+#      helper() {
+#        ls /etc/containers/systemd/users/$UID | \
+#        grep ".kube$\|.container$" | \
+#        cut --delimiter="." --fields=1 | \
+#        sed "s/$/.service/g"
+#      }
+#
+#      inotifywait --monitor \
+#        --include ".container$|.env$|.kube$|.yml$" \
+#        --timefmt "%Y-%m-%dT%T%z" \
+#        --format "%T %w %e %f" \
+#        --event modify \
+#        /etc/containers/systemd/users/$UID |
+#      while read -r file_modified; do
+#        echo "$file_modified"
+#        systemctl --user daemon-reload
+#        systemctl --user restart $(helper)
+#      done
+#    mode: 0755
+#    variants:
+#      - podman
 
 #  - path: /var/lib/systemd/linger/rootless-container
 #    generator: dump
@@ -187,7 +187,7 @@ packages:
         # See https://rootlesscontaine.rs/getting-started/common/login
         #- dbus-daemon
         - dnf-automatic
-        - inotify-tools
+        #- inotify-tools
         - podman
         - systemd-container
         - vim
@@ -315,7 +315,8 @@ actions:
           /etc/containers/systemd/users/"${USER_UID}"
 
       # ???
-      #machinectl shell container-rootless@ /usr/bin/systemctl --user enable podman-auto-update.timer dbus.service
+      #machinectl shell container-rootless@ /usr/bin/systemctl --user enable podman-auto-update.timer
+      systemctl --global enable podman-auto-update.timer
 
       # same as loginctl enable-linger
       mkdir -p /var/lib/systemd/linger
@@ -337,9 +338,9 @@ actions:
         mv "${repo}" ${repo%.*}
       done
 
-  - trigger: post-files
-    action: |-
-      #!/usr/bin/env bash
-      set -eux
-
-      systemctl enable --global inotifywait.service
+#  - trigger: post-files
+#    action: |-
+#      #!/usr/bin/env bash
+#      set -eux
+#
+#      systemctl enable --global inotifywait.service
