@@ -43,7 +43,7 @@ jobs:
         uses: supertemaki/distrobuilder-build@main
 
       - name: Upload image artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lxd-images
           path: distrobuilder.output
